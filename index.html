@@ -88,7 +88,34 @@ document.getElementById("loginBtn").onclick=async()=>{const input=document.getEl
 function showAdmin(){document.getElementById("loginArea").classList.add("hidden");document.getElementById("adminContent").classList.remove("hidden");document.getElementById("settingTitle").value=state.title;document.getElementById("settingDescription").value=state.description;document.getElementById("settingTextColor").value=state.textColor;document.getElementById("settingButtonColor").value=state.buttonColor;document.getElementById("settingLineColor").value=state.lineColor;document.getElementById("settingDailyLimit").value=state.dailyLimit;document.getElementById("settingWinLine").value=state.winLine;renderItems()}
 document.getElementById("logoutBtn").onclick=()=>{admin=false;document.getElementById("loginArea").classList.remove("hidden");document.getElementById("adminContent").classList.add("hidden");document.getElementById("adminPassword").value=""};
 document.getElementById("saveSettingsBtn").onclick=()=>{if(!admin)return;state.title=document.getElementById("settingTitle").value.trim()||defaults.title;state.description=document.getElementById("settingDescription").value;state.textColor=document.getElementById("settingTextColor").value;state.buttonColor=document.getElementById("settingButtonColor").value;state.lineColor=document.getElementById("settingLineColor").value;state.dailyLimit=Math.max(1,Number(document.getElementById("settingDailyLimit").value)||1);state.winLine=document.getElementById("settingWinLine").value;document.querySelectorAll("[data-edit]").forEach(el=>{const it=state.items.find(i=>i.id===Number(el.dataset.id));if(!it)return;const k=el.dataset.edit;if(k==="quantity"){it.quantity=Math.max(0,Number(el.value)||0);it.remaining=Math.min(it.remaining,it.quantity)}else it[k]=el.value});save();applyTheme();updateDraw();renderItems();alert("設定を保存しました")};
-document.getElementById("addItemBtn").onclick=async()=>{if(!admin)return;const name=document.getElementById("newItemName").value.trim();if(!name){alert("アイテム名を入力してください");return}let imageUrl="";const file=document.getElementById("newItemImage").files[0];if(file){imageUrl=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}const q=Math.max(1,Number(document.getElementById("newItemQty").value)||1);state.items.push({id:Date.now(),name,quantity:q,remaining:q,rarity:document.getElementById("newItemRare").value,image:imageUrl,info:document.getElementById("newItemInfo").value});save();renderItems();document.getElementById("newItemName").value="";document.getElementById("newItemInfo").value="";document.getElementById("newItemImage").value=""};
+"保存容量が不足しています。画像を小さくするか、画像なしで追加してください。"
+);
+}
+
+throw error;
+}
+
+renderItems();
+
+nameInput.value = "";
+infoInput.value = "";
+imageInput.value = "";
+
+alert("アイテムを追加しました。");
+
+} catch (error) {
+console.error("アイテム追加エラー:", error);
+
+alert(
+"アイテムを追加できませんでした。\n" +
+(error.message || "ブラウザーの保存領域を確認してください。")
+);
+
+} finally {
+button.disabled = false;
+button.textContent = "アイテムを追加";
+}
+};
 document.getElementById("itemRows").onclick=e=>{const id=Number(e.target.dataset.delete);if(id&&admin&&confirm("このアイテムを削除しますか？")){state.items=state.items.filter(i=>i.id!==id);save();renderItems()}};
 document.getElementById("bulkAddBtn").onclick=()=>{if(!admin)return;try{const arr=JSON.parse(document.getElementById("bulkItems").value);if(!Array.isArray(arr))throw Error();arr.forEach(x=>{if(x.name)state.items.push({id:Date.now()+Math.random(),name:String(x.name),quantity:Math.max(0,Number(x.quantity)||1),remaining:Math.max(0,Number(x.quantity)||1),rarity:["normal","rare","super"].includes(x.rarity)?x.rarity:"normal",image:x.image||"",info:x.info||""})});save();renderItems();alert("追加しました")}catch{alert("JSONの形式を確認してください")}};
 document.getElementById("refreshAdminBtn").onclick=()=>{state=load("mikeneko_state",defaults);history=load("mikeneko_history",[]);draws=load("mikeneko_draws",{date:today(),count:0});applyTheme();updateDraw();if(admin)showAdmin()};
