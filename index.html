@@ -57,9 +57,10 @@ footer{color:#777;font-size:.75rem;padding:24px}
 const PASSWORD_HASH = "ab51004e9d71a485f160f655fb9e72bcdef8f5ca4178b26938b49471456fd11c"; // パスワード文字列そのものは埋め込まず、SHA-256照合
 const defaults = {title:"今日の三毛猫さん",description:"気まぐれな三毛猫と遊ぼう",textColor:"#f3f0eb",buttonColor:"#bdb6aa",lineColor:"#827b73",dailyLimit:1,winLine:"三毛猫さんからの贈り物！",
 items:[
-{id:1,name:"猫じゃらし",quantity:1,remaining:1,rarity:"normal",image:"",info:""},
-{id:2,name:"またたび",quantity:1,remaining:1,rarity:"rare",image:"",info:""},
-{id:3,name:"お魚のおもちゃ",quantity:1,remaining:1,rarity:"normal",image:"",info:""}
+{id:1,name:"猫じゃらし",quantity:1,remaining:10,rarity:"normal",image:"",info:""},
+{id:2,name:"またたび",quantity:1,remaining:3,rarity:"rare",image:"",info:""},
+{id:3,name:"猫のヒゲ",quantity:1,remaining:1,rarity:"rare",image:"",info:""},
+{id:4,name:"お魚のおもちゃ",quantity:1,remaining:10,rarity:"normal",image:"",info:""}
 ]};
 const today=()=>new Date().toLocaleDateString("sv-SE");
 function load(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
